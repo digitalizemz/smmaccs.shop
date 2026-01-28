@@ -962,7 +962,7 @@
         <div class="header-content">
             <div class="logo">
                 <div class="logo-icon">S</div>
-                <span class="logo-text">SMM<span>ACC</span> Shop</span>
+                <span class="logo-text">SMM<span>ACC</span></span>
             </div>
             <div class="lang-toggle">
                 <button class="lang-btn active" data-lang="pt" onclick="setLanguage('pt')">PT</button>
@@ -1214,14 +1214,13 @@
 
                     <div class="price-display">
                         <div class="price-per-unit">
-                            <span class="price-currency">R$</span>
-                            <span class="price-value">127</span>
+                            <span class="price-currency">$</span>
+                            <span class="price-value">25</span>
                             <span class="price-period">
-                                <span class="lang-pt">/ conta</span>
-                                <span class="lang-en">/ account</span>
+                                <span class="lang-pt">USD / conta</span>
+                                <span class="lang-en">USD / account</span>
                             </span>
                         </div>
-                        <div class="price-usd">≈ $25 USD</div>
                         <div class="discount-badge">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
@@ -1246,11 +1245,11 @@
                             </div>
                             <div class="total-display">
                                 <div class="total-label">Total:</div>
-                                <div class="total-value" id="total-price">R$ 127,00</div>
+                                <div class="total-value" id="total-price">$25.00 USD</div>
                                 <div class="total-savings" id="savings" style="display: none;">
-                                    <span class="lang-pt">Você economiza R$ </span>
-                                    <span class="lang-en">You save R$ </span>
-                                    <span id="savings-amount">0</span>
+                                    <span class="lang-pt">Você economiza $</span>
+                                    <span class="lang-en">You save $</span>
+                                    <span id="savings-amount">0</span> USD
                                 </div>
                             </div>
                         </div>
@@ -1634,11 +1633,11 @@
     <footer>
         <div class="footer-logo">
             <div class="logo-icon">S</div>
-            <span class="logo-text">SMM<span>ACC</span> Shop</span>
+            <span class="logo-text">SMM<span>ACC</span></span>
         </div>
         <p class="footer-text">
-            <span class="lang-pt">© 2026 SMM ACC Shop. Todos os direitos reservados.</span>
-            <span class="lang-en">© 2026 SMM ACC Shop. All rights reserved.</span>
+            <span class="lang-pt">© 2026 SMM ACC. Todos os direitos reservados.</span>
+            <span class="lang-en">© 2026 SMM ACC. All rights reserved.</span>
         </p>
         <div class="footer-links">
             <a href="#">
@@ -1658,10 +1657,10 @@
 
     <script>
         // Pricing configuration
-        const PRICE_PER_ACCOUNT = 127;
+        const PRICE_PER_ACCOUNT = 25;
         const DISCOUNT_THRESHOLD = 5;
         const DISCOUNT_PERCENT = 15;
-        const WHATSAPP_NUMBER = '258871252278'; // ALTERE PARA SEU NÚMERO
+        const WHATSAPP_NUMBER = '255871252278'; // ALTERE PARA SEU NÚMERO
 
         let currentQuantity = 1;
         let currentLang = 'pt';
@@ -1684,14 +1683,14 @@
                 total = total - savings;
             }
 
-            document.getElementById('total-price').textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+            document.getElementById('total-price').textContent = `$${total.toFixed(2)} USD`;
             
             const savingsEl = document.getElementById('savings');
             const savingsAmountEl = document.getElementById('savings-amount');
             
             if (savings > 0) {
                 savingsEl.style.display = 'block';
-                savingsAmountEl.textContent = savings.toFixed(2).replace('.', ',');
+                savingsAmountEl.textContent = savings.toFixed(2);
             } else {
                 savingsEl.style.display = 'none';
             }
@@ -1708,8 +1707,8 @@
 
             // Update page title
             document.title = lang === 'pt' 
-                ? 'SMM ACC Shop | Contas Hotmart Verificadas' 
-                : 'SMM ACC Shop | Verified Hotmart Accounts';
+                ? 'SMM ACC | Contas Hotmart Verificadas' 
+                : 'SMM ACC | Verified Hotmart Accounts';
         }
 
         function toggleFaq(button) {
@@ -1741,7 +1740,7 @@
             }
 
             const message = currentLang === 'pt' 
-                ? `🔥 *NOVO PEDIDO - SMM ACC Shop*
+                ? `🔥 *NOVO PEDIDO - SMM ACC*
 
 👤 *Nome:* ${name}
 📧 *Email:* ${email}
@@ -1750,13 +1749,13 @@
 
 📦 *Pedido:*
 • Quantidade: ${currentQuantity} conta(s) Hotmart Verificada(s)
-• Valor Total: R$ ${total.toFixed(2).replace('.', ',')}
+• Valor Total: $${total.toFixed(2)} USD
 ${currentQuantity >= DISCOUNT_THRESHOLD ? `• Desconto aplicado: 15%` : ''}
 
 ✅ Incluso: Conta + Email + Docs + Guia Payoneer + Templates N8N + Suporte
 
 Olá! Gostaria de finalizar minha compra.`
-                : `🔥 *NEW ORDER - SMM ACC Shop*
+                : `🔥 *NEW ORDER - SMM ACC*
 
 👤 *Name:* ${name}
 📧 *Email:* ${email}
@@ -1765,7 +1764,7 @@ Olá! Gostaria de finalizar minha compra.`
 
 📦 *Order:*
 • Quantity: ${currentQuantity} Verified Hotmart account(s)
-• Total: R$ ${total.toFixed(2).replace('.', ',')} (~$${(total / 5).toFixed(0)} USD)
+• Total: $${total.toFixed(2)} USD
 ${currentQuantity >= DISCOUNT_THRESHOLD ? `• Discount applied: 15%` : ''}
 
 ✅ Included: Account + Email + Docs + Payoneer Guide + N8N Templates + Support
