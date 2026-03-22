@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,36 +18,38 @@
   --mono:'JetBrains Mono',monospace;--sans:'Sora',sans-serif;
   --radius:10px;
 }
-html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:100vh;overflow-x:hidden}
 body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 50% -20%,rgba(59,130,246,.06),transparent);pointer-events:none;z-index:0}
-
-/* ─── LAYOUT ─── */
 .app{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:24px 20px 60px}
 
-/* ─── HEADER ─── */
-.hdr{text-align:center;padding:32px 0 28px}
+.hdr{text-align:center;padding:32px 0 28px;position:relative}
 .hdr__logo{display:inline-flex;align-items:center;gap:10px;margin-bottom:14px}
 .hdr__icon{width:40px;height:40px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 0 24px var(--accent-glow)}
 .hdr h1{font-size:36px;font-weight:800;letter-spacing:-1.5px;background:linear-gradient(135deg,#fff 30%,var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
 .hdr p{color:var(--text2);font-size:14px;font-weight:300;max-width:520px;margin:0 auto;line-height:1.6}
 .hdr__badge{display:inline-block;font-family:var(--mono);font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--green);background:var(--green-dim);padding:4px 12px;border-radius:20px;margin-top:10px;border:1px solid rgba(34,197,94,.2)}
 
-/* ─── TABS ─── */
+/* Flag language toggle */
+.lang-toggle{position:absolute;top:0;right:0;display:flex;gap:0;background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.lang-btn{padding:7px 12px;font-size:20px;background:none;border:none;cursor:pointer;transition:all .2s;line-height:1;display:flex;align-items:center;gap:6px;position:relative}
+.lang-btn span.lang-label{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:.5px;transition:color .2s}
+.lang-btn::after{content:'';position:absolute;inset:0;background:var(--accent-dim);opacity:0;transition:opacity .2s}
+.lang-btn:hover::after{opacity:.5}
+.lang-btn.active::after{opacity:1}
+.lang-btn.active span.lang-label{color:var(--accent)}
+.lang-btn.active{box-shadow:inset 0 -2px 0 var(--accent)}
+
 .tabs{display:flex;gap:4px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:4px;margin-bottom:24px;overflow-x:auto}
 .tab{flex:1;padding:12px 16px;font-family:var(--sans);font-size:13px;font-weight:500;color:var(--text3);background:none;border:none;border-radius:8px;cursor:pointer;transition:all .25s;white-space:nowrap;text-align:center}
 .tab:hover{color:var(--text2);background:var(--surface2)}
 .tab.active{color:#fff;background:var(--accent);box-shadow:0 2px 12px var(--accent-glow)}
-.tab-panel{display:none}
-.tab-panel.active{display:block;animation:fadeIn .3s ease}
+.tab-panel{display:none}.tab-panel.active{display:block;animation:fadeIn .3s ease}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
-/* ─── PANELS / CARDS ─── */
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
 .card__title{font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:16px;display:flex;align-items:center;gap:8px}
 .card__title::before{content:'';width:3px;height:12px;background:var(--accent);border-radius:2px}
 
-/* ─── DROPZONE ─── */
 .drop{border:2px dashed var(--border);border-radius:14px;padding:48px 20px;text-align:center;cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
 .drop::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at center,var(--accent-dim),transparent 70%);opacity:0;transition:opacity .3s}
 .drop:hover,.drop.over{border-color:var(--accent)}.drop:hover::before,.drop.over::before{opacity:1}
@@ -57,20 +59,17 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .drop__s{position:relative;z-index:1;font-size:11px;color:var(--text3);font-family:var(--mono)}
 .drop input{display:none}
 
-/* ─── GRID LAYOUT ─── */
 .grid-2{display:grid;grid-template-columns:300px 1fr;gap:20px;align-items:start}
 @media(max-width:860px){.grid-2{grid-template-columns:1fr}}
 
-/* ─── CONTROLS ─── */
-.ctrl{margin-bottom:16px}
-.ctrl label{display:block;font-size:12px;font-weight:500;color:var(--text2);margin-bottom:6px}
+.ctrl{margin-bottom:14px}
+.ctrl label{display:block;font-size:12px;font-weight:500;color:var(--text2);margin-bottom:5px}
 .srow{display:flex;align-items:center;gap:10px}
 .srow input[type=range]{flex:1;-webkit-appearance:none;height:3px;background:var(--border);border-radius:2px;outline:none}
 .srow input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--accent);cursor:pointer;box-shadow:0 0 8px var(--accent-glow)}
 .sval{font-family:var(--mono);font-size:11px;color:var(--accent);min-width:34px;text-align:right}
 
-/* checkboxes */
-.chk{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface2);border-radius:8px;margin-bottom:6px;cursor:pointer;transition:all .2s;border:1px solid transparent;font-size:12px;color:var(--text2)}
+.chk{display:flex;align-items:center;gap:10px;padding:8px 11px;background:var(--surface2);border-radius:8px;margin-bottom:5px;cursor:pointer;transition:all .2s;border:1px solid transparent;font-size:12px;color:var(--text2)}
 .chk:hover{background:var(--surface3)}
 .chk.on{border-color:rgba(59,130,246,.25);background:var(--accent-dim);color:var(--text)}
 .chk input{display:none}
@@ -79,7 +78,12 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .chk__box svg{width:10px;height:10px;opacity:0;transition:opacity .15s}
 .chk.on .chk__box svg{opacity:1}
 
-/* ─── FILE LIST ─── */
+.mode-sel{display:flex;gap:6px;margin-bottom:12px}
+.mode-btn{flex:1;padding:10px 8px;text-align:center;font-size:11px;font-weight:600;border:1px solid var(--border);border-radius:8px;cursor:pointer;transition:all .2s;background:var(--surface2);color:var(--text3)}
+.mode-btn:hover{border-color:var(--border-h)}
+.mode-btn.active{border-color:var(--accent);background:var(--accent-dim);color:var(--accent)}
+.mode-btn small{display:block;font-weight:400;font-size:9px;margin-top:3px;opacity:.7}
+
 .flist{display:flex;flex-direction:column;gap:6px;margin-top:16px;max-height:420px;overflow-y:auto}
 .fitem{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:8px;animation:slideUp .3s ease}
 @keyframes slideUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
@@ -93,12 +97,13 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .fitem__tag.vid{color:var(--green);background:var(--green-dim)}
 .fitem__st{font-size:10px;font-family:var(--mono);padding:3px 8px;border-radius:5px;flex-shrink:0}
 .fitem__st.pending{color:var(--text3);background:var(--surface2)}
-.fitem__st.proc{color:var(--yellow);background:var(--yellow-dim)}
+.fitem__st.proc{color:var(--yellow);background:var(--yellow-dim);animation:blinker 1s infinite}
+@keyframes blinker{50%{opacity:.5}}
 .fitem__st.done{color:var(--green);background:var(--green-dim)}
+.fitem__st.err{color:var(--red);background:var(--red-dim)}
 .fitem__rm{background:none;border:none;color:var(--text3);cursor:pointer;padding:4px;border-radius:4px;display:flex;transition:all .2s}
 .fitem__rm:hover{color:var(--red);background:var(--red-dim)}
 
-/* ─── BUTTONS ─── */
 .btn{width:100%;padding:14px;border:none;border-radius:var(--radius);font-family:var(--sans);font-size:14px;font-weight:600;cursor:pointer;transition:all .3s;margin-top:14px}
 .btn-primary{background:var(--accent);color:#fff}
 .btn-primary:hover:not(:disabled){box-shadow:0 0 28px var(--accent-glow);transform:translateY(-1px)}
@@ -107,634 +112,393 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .btn-outline:hover{background:var(--accent-dim)}
 .btn.hide{display:none}
 
-/* ─── PROGRESS ─── */
-.pbar{width:100%;height:3px;background:var(--border);border-radius:2px;margin-top:10px;overflow:hidden;display:none}
-.pbar.on{display:block}
-.pbar__fill{height:100%;background:var(--accent);border-radius:2px;transition:width .3s;box-shadow:0 0 8px var(--accent-glow);width:0}
+.ppanel{display:none;margin-top:16px;padding:20px;background:var(--surface);border:1px solid var(--accent);border-radius:var(--radius);box-shadow:0 0 20px var(--accent-dim)}
+.ppanel.on{display:block;animation:fadeIn .3s ease}
+.pp-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.pp-ttl{font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px}
+.pp-spin{width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.pp-cnt{font-family:var(--mono);font-size:13px;color:var(--accent);font-weight:700}
+.pp-bar{width:100%;height:10px;background:var(--surface3);border-radius:5px;overflow:hidden;margin-bottom:14px}
+.pp-bar__f{height:100%;background:linear-gradient(90deg,var(--accent),#60a5fa);border-radius:5px;transition:width .4s ease;box-shadow:0 0 12px var(--accent-glow);position:relative}
+.pp-bar__f::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);animation:shimmer 1.5s infinite}
+@keyframes shimmer{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+.pp-dets{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.pp-det{text-align:center;padding:10px;background:var(--surface2);border-radius:8px}
+.pp-det__v{font-family:var(--mono);font-size:16px;font-weight:700;color:var(--accent)}
+.pp-det__l{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.pp-cur{font-size:12px;color:var(--text2);padding:10px 14px;background:var(--surface2);border-radius:8px;display:flex;align-items:center;gap:10px;overflow:hidden}
+.pp-cur__nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+.pp-cur__st{font-family:var(--mono);font-size:11px;color:var(--yellow);flex-shrink:0;padding:2px 8px;background:var(--yellow-dim);border-radius:4px}
+.pp-cur__st.ok{color:var(--green);background:var(--green-dim)}
+.pp-warn{margin-top:10px;padding:8px 12px;background:var(--yellow-dim);border:1px solid rgba(234,179,8,.2);border-radius:6px;font-size:11px;color:var(--yellow);display:none}
+.pp-warn.on{display:block}
 
-/* ─── LOG ─── */
-.log{margin-top:14px;font-family:var(--mono);font-size:10px;color:var(--text3);max-height:140px;overflow-y:auto;padding:10px;background:var(--surface);border:1px solid var(--border);border-radius:8px;display:none}
-.log.on{display:block}
-.log div{padding:2px 0;border-bottom:1px solid rgba(255,255,255,.02)}
-.log .ok{color:var(--green)}.log .wr{color:var(--yellow)}.log .nf{color:var(--text2)}
-
-/* ─── STATS ─── */
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:16px;display:none}
 @media(max-width:600px){.stats{grid-template-columns:repeat(2,1fr)}}
 .st{text-align:center;padding:14px 8px;background:var(--surface);border:1px solid var(--border);border-radius:8px}
 .st__v{font-family:var(--mono);font-size:20px;font-weight:700;color:var(--accent)}
 .st__l{font-size:10px;color:var(--text3);margin-top:3px;text-transform:uppercase;letter-spacing:1px}
 
-/* ─── METADATA VIEWER ─── */
-.meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-@media(max-width:700px){.meta-grid{grid-template-columns:1fr}}
-.meta-card{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:16px;max-height:500px;overflow-y:auto}
-.meta-card h3{font-size:12px;font-weight:600;color:var(--text);margin-bottom:12px;display:flex;align-items:center;gap:6px}
-.meta-card h3 .dot{width:8px;height:8px;border-radius:50%}
-.meta-card h3 .dot.red{background:var(--red)}.meta-card h3 .dot.grn{background:var(--green)}
+.log{margin-top:14px;font-family:var(--mono);font-size:10px;color:var(--text3);max-height:140px;overflow-y:auto;padding:10px;background:var(--surface);border:1px solid var(--border);border-radius:8px;display:none}
+.log.on{display:block}.log div{padding:2px 0;border-bottom:1px solid rgba(255,255,255,.02)}
+.log .ok{color:var(--green)}.log .wr{color:var(--yellow)}.log .nf{color:var(--text2)}
+
+.meta-empty{color:var(--text3);font-size:12px;text-align:center;padding:40px 20px}
 .meta-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.03);font-size:11px}
 .meta-row .k{color:var(--text3);font-family:var(--mono)}.meta-row .v{color:var(--text);text-align:right;max-width:55%;word-break:break-all}
-.meta-empty{color:var(--text3);font-size:12px;text-align:center;padding:40px 20px}
-.meta-upload{margin-bottom:16px}
 
-/* ─── COMPARE ─── */
 .cmp-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
 @media(max-width:700px){.cmp-row{grid-template-columns:1fr}}
 .cmp-box{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center}
 .cmp-box h4{font-size:11px;font-family:var(--mono);color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px}
-.cmp-preview{max-width:100%;max-height:260px;border-radius:6px;margin-bottom:12px;background:var(--surface3)}
-.cmp-vid{width:100%;max-height:260px;border-radius:6px;margin-bottom:12px;background:#000}
-.cmp-diff{margin-top:16px}
 .cmp-diff__row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.03);font-size:12px}
 .cmp-diff__label{color:var(--text3);flex:1;font-family:var(--mono);font-size:11px}
 .cmp-diff__before{color:var(--red);flex:1;text-align:center;font-family:var(--mono);font-size:11px}
 .cmp-diff__after{color:var(--green);flex:1;text-align:center;font-family:var(--mono);font-size:11px}
-.badge-changed{font-size:9px;background:var(--green-dim);color:var(--green);padding:2px 6px;border-radius:3px;font-family:var(--mono)}
+.badge-changed{font-size:9px;background:var(--green-dim);color:var(--green);padding:2px 6px;border-radius:3px;font-family:var(--mono);margin-left:4px}
 
-/* ─── FOOTER ─── */
 .footer{text-align:center;padding:48px 20px 20px;font-size:11px;color:var(--text3);line-height:1.8}
 .footer a{color:var(--text2);text-decoration:none;transition:color .2s}.footer a:hover{color:var(--accent)}
 .footer__donate{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:10px;color:var(--text3);background:var(--surface2);padding:4px 10px;border-radius:6px;margin-top:6px;text-decoration:none;border:1px solid var(--border);transition:all .2s}
 .footer__donate:hover{border-color:var(--border-h);color:var(--text2)}
 
-/* scrollbar */
 ::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
 </style>
 </head>
 <body>
 <div class="app">
 
-<!-- HEADER -->
 <header class="hdr">
-  <div class="hdr__logo">
-    <div class="hdr__icon">⚡</div>
-    <h1>Zuck Breaker</h1>
+  <div class="lang-toggle">
+    <button class="lang-btn active" data-lang="en" onclick="setLang('en')">🇺🇸 <span class="lang-label">EN</span></button>
+    <button class="lang-btn" data-lang="pt" onclick="setLang('pt')">🇧🇷 <span class="lang-label">PT</span></button>
   </div>
-  <p>Limpe metadata, quebre fingerprints e aprove criativos em múltiplas contas de anúncio. Suporte total a imagens e vídeos.</p>
-  <div class="hdr__badge">Open Source • v2.0</div>
+  <div class="hdr__logo"><div class="hdr__icon">⚡</div><h1>Zuck Breaker</h1></div>
+  <p data-i="hdr_desc">Strip metadata, break fingerprints and get creatives approved across multiple ad accounts. Full image & video support with audio preserved.</p>
+  <div class="hdr__badge">Open Source • v3.2</div>
 </header>
 
-<!-- TABS -->
-<nav class="tabs" id="tabs">
-  <button class="tab active" data-tab="process">⚙ Processar</button>
-  <button class="tab" data-tab="metadata">🔍 Ver Metadata</button>
-  <button class="tab" data-tab="compare">⚖ Comparar</button>
+<nav class="tabs">
+  <button class="tab active" data-tab="process" data-i="tab_process">⚙ Process</button>
+  <button class="tab" data-tab="metadata" data-i="tab_meta">🔍 View Metadata</button>
+  <button class="tab" data-tab="compare" data-i="tab_compare">⚖ Compare</button>
 </nav>
 
-<!-- ═══════════════════════════════════════ -->
-<!-- TAB 1: PROCESS -->
-<!-- ═══════════════════════════════════════ -->
+<!-- TAB 1 -->
 <div class="tab-panel active" id="panel-process">
-  <div class="grid-2">
-
-    <!-- Sidebar -->
-    <aside>
-      <div class="card">
-        <div class="card__title">Ajustes de Imagem</div>
-        <div class="ctrl"><label>Brilho (±%)</label><div class="srow"><input type="range" id="s-brightness" min="0" max="10" value="2"><span class="sval" id="v-brightness">2%</span></div></div>
-        <div class="ctrl"><label>Contraste (±%)</label><div class="srow"><input type="range" id="s-contrast" min="0" max="10" value="2"><span class="sval" id="v-contrast">2%</span></div></div>
-        <div class="ctrl"><label>Crop bordas (px)</label><div class="srow"><input type="range" id="s-crop" min="0" max="20" value="4"><span class="sval" id="v-crop">4px</span></div></div>
-        <div class="ctrl"><label>Noise / Grain</label><div class="srow"><input type="range" id="s-noise" min="0" max="15" value="3"><span class="sval" id="v-noise">3</span></div></div>
-        <div class="ctrl"><label>Qualidade output (%)</label><div class="srow"><input type="range" id="s-quality" min="60" max="100" value="92"><span class="sval" id="v-quality">92%</span></div></div>
-      </div>
-
-      <div class="card">
-        <div class="card__title">Transformações</div>
-        <label class="chk on" onclick="tgl(this)"><input type="checkbox" id="o-meta" checked><div class="chk__box"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span>Remover toda metadata</span></label>
-        <label class="chk on" onclick="tgl(this)"><input type="checkbox" id="o-flip" checked><div class="chk__box"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span>Flip horizontal</span></label>
-        <label class="chk on" onclick="tgl(this)"><input type="checkbox" id="o-pixel" checked><div class="chk__box"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span>Pixel shift (1-2px)</span></label>
-        <label class="chk" onclick="tgl(this)"><input type="checkbox" id="o-hue"><div class="chk__box"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span>Hue shift aleatório</span></label>
-        <label class="chk" onclick="tgl(this)"><input type="checkbox" id="o-resize"><div class="chk__box"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span>Resize ±2%</span></label>
-        <label class="chk on" onclick="tgl(this)"><input type="checkbox" id="o-speed" checked><div class="chk__box"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span>Vídeo: speed shift ±0.5%</span></label>
-        <label class="chk on" onclick="tgl(this)"><input type="checkbox" id="o-reencode" checked><div class="chk__box"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span>Vídeo: re-encode completo</span></label>
-      </div>
-    </aside>
-
-    <!-- Main -->
-    <div>
-      <div class="drop" id="drop1">
-        <div class="drop__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 16V4m0 0L8 8m4-4l4 4"/><path d="M20 16v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2"/></svg></div>
-        <div class="drop__t">Arrasta imagens ou vídeos aqui</div>
-        <div class="drop__s">JPG, PNG, WEBP, MP4, MOV, AVI, MKV, WEBM</div>
-        <input type="file" id="in1" multiple accept="image/*,video/*">
-      </div>
-
-      <div class="flist" id="flist1"></div>
-
-      <button class="btn btn-primary" id="btnProc" disabled>Processar Todos os Criativos</button>
-      <div class="pbar" id="pbar1"><div class="pbar__fill" id="pfill1"></div></div>
-
-      <div class="stats" id="stats1" style="display:none">
-        <div class="st"><div class="st__v" id="s-total">0</div><div class="st__l">Total</div></div>
-        <div class="st"><div class="st__v" id="s-imgs">0</div><div class="st__l">Imagens</div></div>
-        <div class="st"><div class="st__v" id="s-vids">0</div><div class="st__l">Vídeos</div></div>
-        <div class="st"><div class="st__v" id="s-hash">0</div><div class="st__l">Hash Quebrado</div></div>
-      </div>
-
-      <button class="btn btn-outline hide" id="btnDL">⬇ Download Todos</button>
-
-      <div class="log" id="log1"></div>
-    </div>
+<div class="grid-2">
+<aside>
+  <div class="card">
+    <div class="card__title" data-i="ct_visual">Visual Adjustments</div>
+    <div class="ctrl"><label data-i="lb_br">Brightness (±%)</label><div class="srow"><input type="range" id="s-br" min="0" max="10" value="2"><span class="sval" id="v-br">2%</span></div></div>
+    <div class="ctrl"><label data-i="lb_ct">Contrast (±%)</label><div class="srow"><input type="range" id="s-ct" min="0" max="10" value="2"><span class="sval" id="v-ct">2%</span></div></div>
+    <div class="ctrl"><label data-i="lb_cr">Edge crop (px)</label><div class="srow"><input type="range" id="s-cr" min="0" max="20" value="4"><span class="sval" id="v-cr">4px</span></div></div>
+    <div class="ctrl"><label data-i="lb_ns">Noise / Grain</label><div class="srow"><input type="range" id="s-ns" min="0" max="15" value="3"><span class="sval" id="v-ns">3</span></div></div>
+    <div class="ctrl"><label data-i="lb_qu">Output quality (%)</label><div class="srow"><input type="range" id="s-qu" min="60" max="100" value="92"><span class="sval" id="v-qu">92%</span></div></div>
   </div>
+  <div class="card">
+    <div class="card__title" data-i="ct_transforms">Transformations</div>
+    <label class="chk on" onclick="tgl(this)"><input type="checkbox" id="o-meta" checked><div class="chk__box"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span data-i="chk_meta">Strip all metadata</span></label>
+    <label class="chk on" onclick="tgl(this)"><input type="checkbox" id="o-flip" checked><div class="chk__box"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span data-i="chk_flip">Horizontal flip</span></label>
+    <label class="chk on" onclick="tgl(this)"><input type="checkbox" id="o-pixel" checked><div class="chk__box"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span data-i="chk_pixel">Pixel shift (1-2px)</span></label>
+    <label class="chk" onclick="tgl(this)"><input type="checkbox" id="o-hue"><div class="chk__box"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span data-i="chk_hue">Random hue shift</span></label>
+    <label class="chk" onclick="tgl(this)"><input type="checkbox" id="o-resize"><div class="chk__box"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div><span data-i="chk_resize">Resize ±2%</span></label>
+  </div>
+  <div class="card">
+    <div class="card__title" data-i="ct_vidmode">Video Mode</div>
+    <div class="mode-sel">
+      <div class="mode-btn active" id="mode-fast" onclick="setMode('fast')">⚡ <span data-i="mode_fast">Fast</span><small data-i="mode_fast_sub">Byte-level, seconds</small></div>
+      <div class="mode-btn" id="mode-full" onclick="setMode('full')">🎬 <span data-i="mode_full">Complete</span><small data-i="mode_full_sub">Re-encode + noise</small></div>
+    </div>
+    <div id="mode-desc-fast" data-i="mode_fast_desc" style="font-size:10px;color:var(--text3);line-height:1.5;padding:0 2px">Modifies container bytes, strips metadata, injects random data. <b style="color:var(--green)">100MB+ in seconds</b>. Audio 100% intact. No visual changes.</div>
+    <div id="mode-desc-full" data-i="mode_full_desc" style="font-size:10px;color:var(--text3);line-height:1.5;padding:0 2px;display:none">Frame-by-frame re-encode with visual noise, brightness, contrast. <b style="color:var(--yellow)">Slower</b> (plays at 3x). Audio captured & preserved. Output WebM.</div>
+  </div>
+</aside>
+<div>
+  <div class="drop" id="drop1">
+    <div class="drop__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 16V4m0 0L8 8m4-4l4 4"/><path d="M20 16v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2"/></svg></div>
+    <div class="drop__t" data-i="drop_title">Drag images or videos here</div>
+    <div class="drop__s">JPG, PNG, WEBP, MP4, MOV, AVI, MKV, WEBM</div>
+    <input type="file" id="in1" multiple accept="image/*,video/*">
+  </div>
+  <div class="flist" id="flist1"></div>
+  <button class="btn btn-primary" id="btnProc" disabled data-i="btn_process">Process All Creatives</button>
+  <div class="ppanel" id="ppanel">
+    <div class="pp-hdr"><div class="pp-ttl"><div class="pp-spin" id="ppSpin"></div><span id="ppTtlTxt" data-i="pp_processing">Processing...</span></div><div class="pp-cnt" id="ppCnt">0/0</div></div>
+    <div class="pp-bar"><div class="pp-bar__f" id="ppFill" style="width:0%"></div></div>
+    <div class="pp-dets">
+      <div class="pp-det"><div class="pp-det__v" id="ppPct">0%</div><div class="pp-det__l" data-i="pp_progress">Progress</div></div>
+      <div class="pp-det"><div class="pp-det__v" id="ppTime">0s</div><div class="pp-det__l" data-i="pp_time">Time</div></div>
+      <div class="pp-det"><div class="pp-det__v" id="ppEta">—</div><div class="pp-det__l" data-i="pp_remaining">Remaining</div></div>
+    </div>
+    <div class="pp-cur"><div class="pp-cur__st" id="ppStep">WAITING</div><div class="pp-cur__nm" id="ppName">...</div></div>
+    <div class="pp-warn" id="ppWarn" data-i="pp_audio_warn">🎵 Audio will be preserved — don't worry!</div>
+  </div>
+  <div class="stats" id="stats1">
+    <div class="st"><div class="st__v" id="s-total">0</div><div class="st__l" data-i="st_total">Total</div></div>
+    <div class="st"><div class="st__v" id="s-imgs">0</div><div class="st__l" data-i="st_images">Images</div></div>
+    <div class="st"><div class="st__v" id="s-vids">0</div><div class="st__l" data-i="st_videos">Videos</div></div>
+    <div class="st"><div class="st__v" id="s-hash">0</div><div class="st__l" data-i="st_hash">Hash Broken</div></div>
+  </div>
+  <button class="btn btn-outline hide" id="btnDL" data-i="btn_download">⬇ Download All Clean Creatives</button>
+  <div class="log" id="log1"></div>
+</div>
+</div>
 </div>
 
-<!-- ═══════════════════════════════════════ -->
-<!-- TAB 2: METADATA VIEWER -->
-<!-- ═══════════════════════════════════════ -->
+<!-- TAB 2 -->
 <div class="tab-panel" id="panel-metadata">
-  <div class="card meta-upload">
-    <div class="card__title">Upload para análise</div>
+  <div class="card">
+    <div class="card__title" data-i="meta_upload">Upload for analysis</div>
     <div class="drop" id="drop2" style="padding:32px 20px">
       <div class="drop__ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v8m-4-4h8"/></svg></div>
-      <div class="drop__t">Arrasta um arquivo para ver metadata</div>
-      <div class="drop__s">Imagem ou vídeo</div>
+      <div class="drop__t" data-i="meta_drop">Drag a file to view its metadata</div>
+      <div class="drop__s" data-i="meta_drop_sub">Image or video</div>
       <input type="file" id="in2" accept="image/*,video/*">
     </div>
   </div>
-  <div id="metaContent">
-    <div class="meta-empty">Faça upload de um arquivo para visualizar metadata completa</div>
-  </div>
+  <div id="metaOut"><div class="meta-empty" data-i="meta_empty">Upload a file to view its full metadata</div></div>
 </div>
 
-<!-- ═══════════════════════════════════════ -->
-<!-- TAB 3: COMPARE -->
-<!-- ═══════════════════════════════════════ -->
+<!-- TAB 3 -->
 <div class="tab-panel" id="panel-compare">
   <div class="card">
-    <div class="card__title">Comparação antes / depois</div>
-    <p style="font-size:12px;color:var(--text2);margin-bottom:16px">Upload do arquivo original e do arquivo processado para comparar metadata e fingerprint lado a lado.</p>
+    <div class="card__title" data-i="cmp_title">Before / After Comparison</div>
+    <p style="font-size:12px;color:var(--text2);margin-bottom:16px" data-i="cmp_desc">Upload the original and processed file to compare fingerprints side by side.</p>
     <div class="cmp-row">
-      <div class="cmp-box">
-        <h4>Original</h4>
-        <div class="drop" id="drop-cmp-a" style="padding:24px 16px">
-          <div class="drop__t" style="font-size:13px">Arquivo original</div>
-          <input type="file" id="in-cmp-a" accept="image/*,video/*">
-        </div>
-        <div id="cmp-preview-a"></div>
-      </div>
-      <div class="cmp-box">
-        <h4>Processado</h4>
-        <div class="drop" id="drop-cmp-b" style="padding:24px 16px">
-          <div class="drop__t" style="font-size:13px">Arquivo processado</div>
-          <input type="file" id="in-cmp-b" accept="image/*,video/*">
-        </div>
-        <div id="cmp-preview-b"></div>
-      </div>
+      <div class="cmp-box"><h4 data-i="cmp_original">Original</h4><div class="drop" id="drop-a" style="padding:24px 16px"><div class="drop__t" style="font-size:13px" data-i="cmp_orig_file">Original file</div><input type="file" id="in-a" accept="image/*,video/*"></div><div id="prev-a"></div></div>
+      <div class="cmp-box"><h4 data-i="cmp_processed">Processed</h4><div class="drop" id="drop-b" style="padding:24px 16px"><div class="drop__t" style="font-size:13px" data-i="cmp_proc_file">Processed file</div><input type="file" id="in-b" accept="image/*,video/*"></div><div id="prev-b"></div></div>
     </div>
-    <div id="cmpResult"></div>
+    <div id="cmpRes"></div>
   </div>
 </div>
 
-</div><!-- /app -->
+</div>
 
-<!-- FOOTER -->
 <footer class="footer">
   <div>Zuck Breaker — Open Source Creative Fingerprint Remover</div>
-  <div>Criado por <a href="https://digitalizegroupllc.com" target="_blank">Digitalize Group LLC</a></div>
-  <a href="https://buymeacoffee.com/digitalizegroupllc" target="_blank" class="footer__donate">☕ Apoiar o projeto</a>
+  <div><span data-i="footer_by">Created by</span> <a href="https://digitalizegroupllc.com" target="_blank">Digitalize Group LLC</a></div>
+  <a href="https://buymeacoffee.com/digitalizegroupllc" target="_blank" class="footer__donate">☕ <span data-i="footer_support">Support the project</span></a>
 </footer>
 
 <script>
-/* ─── TABS ─── */
-document.querySelectorAll('.tab').forEach(t=>{
-  t.onclick=()=>{
-    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
-    document.querySelectorAll('.tab-panel').forEach(x=>x.classList.remove('active'));
-    t.classList.add('active');
-    document.getElementById('panel-'+t.dataset.tab).classList.add('active');
-  }
-});
-
-/* ─── CHECKBOX ─── */
-function tgl(el){const c=el.querySelector('input');c.checked=!c.checked;el.classList.toggle('on',c.checked)}
-
-/* ─── SLIDERS ─── */
-document.querySelectorAll('input[type=range]').forEach(s=>{
-  s.oninput=()=>{
-    const suf=s.id==='s-noise'?'':(s.id==='s-crop'?'px':'%');
-    document.getElementById('v-'+s.id.replace('s-','')).textContent=s.value+suf;
-  }
-});
-
-/* ─── DROPZONE UTIL ─── */
-function initDrop(dropId,inputId,cb){
-  const d=document.getElementById(dropId),inp=document.getElementById(inputId);
-  d.onclick=()=>inp.click();
-  d.ondragover=e=>{e.preventDefault();d.classList.add('over')};
-  d.ondragleave=()=>d.classList.remove('over');
-  d.ondrop=e=>{e.preventDefault();d.classList.remove('over');cb(e.dataTransfer.files)};
-  inp.onchange=()=>{cb(inp.files);inp.value=''};
+/* ═══ i18n ═══ */
+const L={
+en:{
+  hdr_desc:"Strip metadata, break fingerprints and get creatives approved across multiple ad accounts. Full image & video support with audio preserved.",
+  tab_process:"⚙ Process",tab_meta:"🔍 View Metadata",tab_compare:"⚖ Compare",
+  ct_visual:"Visual Adjustments",lb_br:"Brightness (±%)",lb_ct:"Contrast (±%)",lb_cr:"Edge crop (px)",lb_ns:"Noise / Grain",lb_qu:"Output quality (%)",
+  ct_transforms:"Transformations",chk_meta:"Strip all metadata",chk_flip:"Horizontal flip",chk_pixel:"Pixel shift (1-2px)",chk_hue:"Random hue shift",chk_resize:"Resize ±2%",
+  ct_vidmode:"Video Mode",mode_fast:"Fast",mode_fast_sub:"Byte-level, seconds",mode_full:"Complete",mode_full_sub:"Re-encode + noise",
+  mode_fast_desc:'Modifies container bytes, strips metadata, injects random data. <b style="color:var(--green)">100MB+ in seconds</b>. Audio 100% intact. No visual changes.',
+  mode_full_desc:'Frame-by-frame re-encode with visual noise, brightness, contrast. <b style="color:var(--yellow)">Slower</b> (plays at 3x). Audio captured & preserved. Output WebM.',
+  drop_title:"Drag images or videos here",btn_process:"Process All Creatives",
+  pp_processing:"Processing...",pp_progress:"Progress",pp_time:"Time",pp_remaining:"Remaining",pp_audio_warn:"🎵 Audio will be preserved — don't worry!",
+  st_total:"Total",st_images:"Images",st_videos:"Videos",st_hash:"Hash Broken",btn_download:"⬇ Download All Clean Creatives",
+  meta_upload:"Upload for analysis",meta_drop:"Drag a file to view its metadata",meta_drop_sub:"Image or video",meta_empty:"Upload a file to view its full metadata",
+  cmp_title:"Before / After Comparison",cmp_desc:"Upload the original and processed file to compare fingerprints side by side.",
+  cmp_original:"Original",cmp_processed:"Processed",cmp_orig_file:"Original file",cmp_proc_file:"Processed file",
+  footer_by:"Created by",footer_support:"Support the project",
+  p:"Pending",pr:"Processing...",cl:"Clean ✓",er:"Error",
+  batch:"Batch started",crtv:"creatives",vm:"video mode",done:"Batch complete",inn:"in",dl:"Download",fls:"files",
+  fpd:"⚠ Fingerprint detected — process before using across multiple accounts",fpc:"✓ File looks clean — no obvious fingerprint",md:"Metadata detected",
+  res:"Result",fld:"Field",fpok:"✓ Fingerprint different — safe",fpmod:"⚠ Moderate difference",fpsim:"✗ Very similar — high risk",fch:"fields changed",
+  ppc:"Processing complete!",ppd:"DONE",
+  rd:"READING FILE",rm:"REMOVING METADATA",sc:"SCANNING",bh:"BREAKING HASH",fb:"FREE BOXES",rt:"RANDOM TRAILER",fn:"FINISHING",cp:"COMPLETE ✓",
+  li:"LOADING IMG",pi:"PROCESSING IMG",sv:"STARTING VIDEO",re:"RE-ENCODING",
+  mb:"Meta box",zr:"zeroed",bx:"bytes XOR in stream",vp:"Video processed",ic:"Image clean",
+  nm:"Name",tp:"Type",sz:"Size",mod:"Modified",reso:"Resolution",dur:"Duration"
+},
+pt:{
+  hdr_desc:"Limpe metadata, quebre fingerprints e aprove criativos em múltiplas contas de anúncio. Suporte total a imagens e vídeos com áudio preservado.",
+  tab_process:"⚙ Processar",tab_meta:"🔍 Ver Metadata",tab_compare:"⚖ Comparar",
+  ct_visual:"Ajustes Visuais",lb_br:"Brilho (±%)",lb_ct:"Contraste (±%)",lb_cr:"Crop bordas (px)",lb_ns:"Noise / Grain",lb_qu:"Qualidade output (%)",
+  ct_transforms:"Transformações",chk_meta:"Remover metadata",chk_flip:"Flip horizontal",chk_pixel:"Pixel shift (1-2px)",chk_hue:"Hue shift aleatório",chk_resize:"Resize ±2%",
+  ct_vidmode:"Modo de Vídeo",mode_fast:"Rápido",mode_fast_sub:"Byte-level, segundos",mode_full:"Completo",mode_full_sub:"Re-encode + ruído",
+  mode_fast_desc:'Modifica bytes do container, limpa metadata, injeta dados aleatórios. <b style="color:var(--green)">100MB+ em segundos</b>. Áudio 100% intacto. Sem mudanças visuais.',
+  mode_full_desc:'Re-encode frame a frame com ruído visual, brilho, contraste. <b style="color:var(--yellow)">Mais lento</b> (reproduz em 3x). Áudio preservado. Output WebM.',
+  drop_title:"Arrasta imagens ou vídeos aqui",btn_process:"Processar Todos os Criativos",
+  pp_processing:"Processando...",pp_progress:"Progresso",pp_time:"Tempo",pp_remaining:"Restante",pp_audio_warn:"🎵 Áudio será preservado — não se preocupe!",
+  st_total:"Total",st_images:"Imagens",st_videos:"Vídeos",st_hash:"Hash Quebrado",btn_download:"⬇ Download Todos os Criativos Limpos",
+  meta_upload:"Upload para análise",meta_drop:"Arrasta um arquivo para ver metadata",meta_drop_sub:"Imagem ou vídeo",meta_empty:"Faça upload de um arquivo para visualizar metadata",
+  cmp_title:"Comparação antes / depois",cmp_desc:"Upload do original e do processado para comparar fingerprint lado a lado.",
+  cmp_original:"Original",cmp_processed:"Processado",cmp_orig_file:"Arquivo original",cmp_proc_file:"Arquivo processado",
+  footer_by:"Criado por",footer_support:"Apoiar o projeto",
+  p:"Pendente",pr:"Processando...",cl:"Limpo ✓",er:"Erro",
+  batch:"Batch iniciado",crtv:"criativos",vm:"modo vídeo",done:"Batch completo",inn:"em",dl:"Download",fls:"arquivos",
+  fpd:"⚠ Fingerprint detectado — processe antes de usar em múltiplas contas",fpc:"✓ Arquivo parece limpo — nenhum fingerprint óbvio",md:"Metadata detectada",
+  res:"Resultado",fld:"Campo",fpok:"✓ Fingerprint diferente — safe",fpmod:"⚠ Diferença moderada",fpsim:"✗ Muito similar — risco alto",fch:"campos alterados",
+  ppc:"Processamento completo!",ppd:"FINALIZADO",
+  rd:"LENDO ARQUIVO",rm:"REMOVENDO METADATA",sc:"SCANNING",bh:"QUEBRANDO HASH",fb:"FREE BOXES",rt:"RANDOM TRAILER",fn:"FINALIZANDO",cp:"COMPLETO ✓",
+  li:"CARREGANDO IMG",pi:"PROCESSANDO IMG",sv:"INICIANDO VÍDEO",re:"RE-ENCODING",
+  mb:"Meta box",zr:"zerada",bx:"bytes XOR no stream",vp:"Vídeo processado",ic:"Imagem limpa",
+  nm:"Nome",tp:"Tipo",sz:"Tamanho",mod:"Modificado",reso:"Resolução",dur:"Duração"
+}};
+let lang='en';
+function t(k){return L[lang][k]||L.en[k]||k}
+function setLang(l){
+  lang=l;document.documentElement.lang=l==='pt'?'pt-BR':'en';
+  document.querySelectorAll('.lang-btn').forEach(b=>b.classList.toggle('active',b.dataset.lang===l));
+  document.querySelectorAll('[data-i]').forEach(el=>{const k=el.getAttribute('data-i');const v=t(k);if(v)el.innerHTML=v});
+  renderFL();
 }
 
-/* ═══════════════════════════════════════ */
-/* TAB 1: PROCESS                         */
-/* ═══════════════════════════════════════ */
-const files=[];const processed=[];let busy=false;
-const flist=document.getElementById('flist1');
-const btnProc=document.getElementById('btnProc');
-const pbar=document.getElementById('pbar1');
-const pfill=document.getElementById('pfill1');
-const logEl=document.getElementById('log1');
-const btnDL=document.getElementById('btnDL');
-const stats1=document.getElementById('stats1');
+/* ═══ Core ═══ */
+document.querySelectorAll('.tab').forEach(tb=>{tb.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.tab-panel').forEach(x=>x.classList.remove('active'));tb.classList.add('active');document.getElementById('panel-'+tb.dataset.tab).classList.add('active')}});
+function tgl(el){const c=el.querySelector('input');c.checked=!c.checked;el.classList.toggle('on',c.checked)}
+document.querySelectorAll('input[type=range]').forEach(s=>{s.oninput=()=>{const k=s.id.replace('s-','');const suf=k==='ns'?'':(k==='cr'?'px':'%');document.getElementById('v-'+k).textContent=s.value+suf}});
+function initDrop(did,iid,cb){const d=document.getElementById(did),inp=document.getElementById(iid);d.onclick=()=>inp.click();d.ondragover=e=>{e.preventDefault();d.classList.add('over')};d.ondragleave=()=>d.classList.remove('over');d.ondrop=e=>{e.preventDefault();d.classList.remove('over');cb(e.dataTransfer.files)};inp.onchange=()=>{cb(inp.files);inp.value=''}}
+function fmt(b){if(b<1024)return b+'B';if(b<1048576)return(b/1024).toFixed(1)+'KB';return(b/1048576).toFixed(1)+'MB'}
+function fmtT(s){if(s<60)return Math.round(s)+'s';return Math.floor(s/60)+'m '+Math.round(s%60)+'s'}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms))}
+let vidMode='fast';
+function setMode(m){vidMode=m;document.getElementById('mode-fast').classList.toggle('active',m==='fast');document.getElementById('mode-full').classList.toggle('active',m==='full');document.getElementById('mode-desc-fast').style.display=m==='fast'?'block':'none';document.getElementById('mode-desc-full').style.display=m==='full'?'block':'none'}
 
-initDrop('drop1','in1',fl=>{
-  for(const f of fl){
-    if(!f.type.startsWith('image/')&&!f.type.startsWith('video/'))continue;
-    files.push({file:f,status:'pending',type:f.type.startsWith('video/')?'vid':'img'});
-  }
-  renderFL();btnProc.disabled=files.length===0;
-});
+/* ═══ TAB 1 ═══ */
+const files=[],processed=[];let busy=false;
+const flist=document.getElementById('flist1'),btnProc=document.getElementById('btnProc'),btnDL=document.getElementById('btnDL');
+const ppanel=document.getElementById('ppanel'),ppFill=document.getElementById('ppFill'),ppCnt=document.getElementById('ppCnt'),ppPct=document.getElementById('ppPct'),ppTime=document.getElementById('ppTime'),ppEta=document.getElementById('ppEta'),ppStep=document.getElementById('ppStep'),ppName=document.getElementById('ppName'),ppSpin=document.getElementById('ppSpin'),ppTtlTxt=document.getElementById('ppTtlTxt'),ppWarn=document.getElementById('ppWarn');
+const logEl=document.getElementById('log1');let timerIv;
 
+initDrop('drop1','in1',fl=>{for(const f of fl){if(!f.type.startsWith('image/')&&!f.type.startsWith('video/'))continue;files.push({file:f,status:'pending',type:f.type.startsWith('video/')?'vid':'img'})}renderFL();btnProc.disabled=files.length===0});
 function removeF(i){files.splice(i,1);renderFL();btnProc.disabled=files.length===0}
-
 function renderFL(){
-  flist.innerHTML='';
-  files.forEach((f,i)=>{
+  flist.innerHTML='';files.forEach((f,i)=>{
     const d=document.createElement('div');d.className='fitem';
-    if(f.type==='img'){
-      const th=document.createElement('img');th.className='fitem__thumb';th.src=URL.createObjectURL(f.file);d.appendChild(th);
-    }else{
-      const v=document.createElement('div');v.className='fitem__vid';v.textContent='▶';d.appendChild(v);
-    }
-    const info=document.createElement('div');info.className='fitem__info';
-    info.innerHTML=`<div class="fitem__name">${f.file.name}</div><div class="fitem__size">${fmt(f.file.size)}</div>`;
-    d.appendChild(info);
-
-    const tag=document.createElement('span');tag.className='fitem__tag '+(f.type==='img'?'img':'vid');
-    tag.textContent=f.type==='img'?'IMG':'VID';d.appendChild(tag);
-
-    const st=document.createElement('span');st.className='fitem__st '+f.status;
-    st.textContent=f.status==='pending'?'Pendente':f.status==='proc'?'Processando...':'Limpo ✓';d.appendChild(st);
-
-    if(f.status==='pending'){
-      const rm=document.createElement('button');rm.className='fitem__rm';
-      rm.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
-      rm.onclick=e=>{e.stopPropagation();removeF(i)};d.appendChild(rm);
-    }
+    if(f.type==='img'){const th=document.createElement('img');th.className='fitem__thumb';th.src=URL.createObjectURL(f.file);d.appendChild(th)}else{const v=document.createElement('div');v.className='fitem__vid';v.textContent='▶';d.appendChild(v)}
+    const info=document.createElement('div');info.className='fitem__info';info.innerHTML=`<div class="fitem__name">${f.file.name}</div><div class="fitem__size">${fmt(f.file.size)}</div>`;d.appendChild(info);
+    const tag=document.createElement('span');tag.className='fitem__tag '+(f.type==='img'?'img':'vid');tag.textContent=f.type==='img'?'IMG':'VID';d.appendChild(tag);
+    const stM={pending:t('p'),proc:t('pr'),done:t('cl'),err:t('er')};
+    const st=document.createElement('span');st.className='fitem__st '+f.status;st.textContent=stM[f.status];d.appendChild(st);
+    if(f.status==='pending'){const rm=document.createElement('button');rm.className='fitem__rm';rm.innerHTML='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';rm.onclick=e=>{e.stopPropagation();removeF(i)};d.appendChild(rm)}
     flist.appendChild(d);
   });
 }
+function lg(m,tp='nf'){logEl.classList.add('on');const d=document.createElement('div');d.className=tp;d.textContent=`[${new Date().toLocaleTimeString(lang==='pt'?'pt-BR':'en-US')}] ${m}`;logEl.prepend(d)}
+function sP(pct,step,name){ppFill.style.width=pct.toFixed(1)+'%';ppPct.textContent=Math.round(pct)+'%';ppStep.textContent=step;ppStep.className='pp-cur__st'+(step.includes('✓')?' ok':'');ppName.textContent=name}
+function $(id){return document.getElementById(id).checked}
 
-function fmt(b){if(b<1024)return b+'B';if(b<1048576)return(b/1024).toFixed(1)+'KB';return(b/1048576).toFixed(1)+'MB'}
-
-function lg(m,t='nf'){logEl.classList.add('on');const d=document.createElement('div');d.className=t;d.textContent=`[${new Date().toLocaleTimeString('pt-BR')}] ${m}`;logEl.prepend(d)}
-
-function loadImg(file){return new Promise((r,j)=>{const i=new Image();i.onload=()=>r(i);i.onerror=j;i.src=URL.createObjectURL(file)})}
-
+function loadImg(f){return new Promise((r,j)=>{const i=new Image();i.onload=()=>r(i);i.onerror=j;i.src=URL.createObjectURL(f)})}
 function procImg(img){
-  const br=+document.getElementById('s-brightness').value;
-  const ct=+document.getElementById('s-contrast').value;
-  const cr=+document.getElementById('s-crop').value;
-  const ns=+document.getElementById('s-noise').value;
-  const qu=+document.getElementById('s-quality').value/100;
-  const doFlip=document.getElementById('o-flip').checked;
-  const doPx=document.getElementById('o-pixel').checked;
-  const doHue=document.getElementById('o-hue').checked;
-  const doRsz=document.getElementById('o-resize').checked;
-
-  let w=img.width,h=img.height;
-  const cl=~~(Math.random()*cr),ctop=~~(Math.random()*cr),cright=~~(Math.random()*cr),cb=~~(Math.random()*cr);
-  let ow=w-cl-cright,oh=h-ctop-cb;
-  if(doRsz){const f=1+(Math.random()*.04-.02);ow=~~(ow*f);oh=~~(oh*f)}
-
+  const br=+document.getElementById('s-br').value,ct=+document.getElementById('s-ct').value,cr=+document.getElementById('s-cr').value,ns=+document.getElementById('s-ns').value,qu=+document.getElementById('s-qu').value/100;
+  const doFlip=$('o-flip'),doPx=$('o-pixel'),doHue=$('o-hue'),doRsz=$('o-resize');
+  let w=img.width,h=img.height;const cl=~~(Math.random()*cr),ctop=~~(Math.random()*cr),cri=~~(Math.random()*cr),cb=~~(Math.random()*cr);
+  let ow=w-cl-cri,oh=h-ctop-cb;if(doRsz){const f=1+(Math.random()*.04-.02);ow=~~(ow*f);oh=~~(oh*f)}
   const c=document.createElement('canvas');c.width=ow;c.height=oh;const x=c.getContext('2d');
   const sx=doPx?~~(Math.random()*3)-1:0,sy=doPx?~~(Math.random()*3)-1:0;
   if(doFlip){x.translate(ow,0);x.scale(-1,1)}
-
-  let fl=[];
-  if(br>0)fl.push(`brightness(${1+(Math.random()*br*2-br)/100})`);
-  if(ct>0)fl.push(`contrast(${1+(Math.random()*ct*2-ct)/100})`);
-  if(doHue)fl.push(`hue-rotate(${~~(Math.random()*6)-3}deg)`);
-  if(fl.length)x.filter=fl.join(' ');
-
-  x.drawImage(img,cl+sx,ctop+sy,w-cl-cright,h-ctop-cb,0,0,ow,oh);
-  x.filter='none';if(doFlip)x.setTransform(1,0,0,1,0,0);
-
-  if(ns>0){
-    const id=x.getImageData(0,0,ow,oh),d=id.data;
-    for(let i=0;i<d.length;i+=4){const n=(Math.random()-.5)*ns*2;d[i]=Math.min(255,Math.max(0,d[i]+n));d[i+1]=Math.min(255,Math.max(0,d[i+1]+n));d[i+2]=Math.min(255,Math.max(0,d[i+2]+n))}
-    x.putImageData(id,0,0);
-  }
+  let fl=[];if(br>0)fl.push(`brightness(${1+(Math.random()*br*2-br)/100})`);if(ct>0)fl.push(`contrast(${1+(Math.random()*ct*2-ct)/100})`);if(doHue)fl.push(`hue-rotate(${~~(Math.random()*6)-3}deg)`);
+  if(fl.length)x.filter=fl.join(' ');x.drawImage(img,cl+sx,ctop+sy,w-cl-cri,h-ctop-cb,0,0,ow,oh);x.filter='none';if(doFlip)x.setTransform(1,0,0,1,0,0);
+  if(ns>0){const id=x.getImageData(0,0,ow,oh),d=id.data;for(let i=0;i<d.length;i+=4){const n=(Math.random()-.5)*ns*2;d[i]=Math.min(255,Math.max(0,d[i]+n));d[i+1]=Math.min(255,Math.max(0,d[i+1]+n));d[i+2]=Math.min(255,Math.max(0,d[i+2]+n))}x.putImageData(id,0,0)}
   return new Promise(r=>c.toBlob(b=>r(b),'image/jpeg',qu));
 }
 
-async function procVid(file){
-  /* Video processing in-browser: re-encode via MediaRecorder + canvas frame manipulation */
-  lg('Processando vídeo: '+file.name+' (re-encode via canvas)','nf');
+async function procVF(file,onP){
+  onP(5,t('rd'));await sleep(30);const buf=await file.arrayBuffer();const bytes=new Uint8Array(buf);
+  onP(20,t('rm'));await sleep(30);const pats=[[0x6D,0x65,0x74,0x61],[0x75,0x64,0x74,0x61],[0x58,0x4D,0x50,0x5F]];let ms=0;
+  for(let i=0;i<bytes.length-8;i++){for(const p of pats){if(bytes[i+4]===p[0]&&bytes[i+5]===p[1]&&bytes[i+6]===p[2]&&bytes[i+7]===p[3]){const s=(bytes[i]<<24)|(bytes[i+1]<<16)|(bytes[i+2]<<8)|bytes[i+3];if(s>8&&s<5e6&&s<bytes.length-i){for(let j=i+8;j<i+s&&j<bytes.length;j++)bytes[j]=0;ms++;lg(t('mb')+' '+String.fromCharCode(...p)+' ('+fmt(s)+') '+t('zr'),'ok')}}}if(i%(2*1024*1024)===0){onP(20+Math.round(i/bytes.length*25),t('sc')+' '+Math.round(i/bytes.length*100)+'%');await sleep(0)}}
+  onP(50,t('bh'));await sleep(30);let mdS=-1,mdE=-1;for(let i=0;i<bytes.length-8;i++){if(bytes[i+4]===0x6D&&bytes[i+5]===0x64&&bytes[i+6]===0x61&&bytes[i+7]===0x74){const s=(bytes[i]<<24)|(bytes[i+1]<<16)|(bytes[i+2]<<8)|bytes[i+3];mdS=i+8;mdE=s>0?Math.min(i+s,bytes.length):bytes.length;break}}
+  let mc=0;if(mdS>0){const range=mdE-mdS;const mods=300+~~(Math.random()*400);for(let m=0;m<mods;m++){bytes[mdS+~~(Math.random()*range)]^=(~~(Math.random()*3)+1);mc++}lg(mc+' '+t('bx'),'ok')}
+  onP(70,t('fb'));await sleep(30);for(let i=0;i<bytes.length-8;i++){const n=String.fromCharCode(bytes[i+4],bytes[i+5],bytes[i+6],bytes[i+7]);if(n==='free'||n==='skip'){const s=(bytes[i]<<24)|(bytes[i+1]<<16)|(bytes[i+2]<<8)|bytes[i+3];if(s>8&&s<bytes.length-i)for(let j=i+8;j<i+s&&j<bytes.length;j++)bytes[j]=~~(Math.random()*256)}}
+  onP(85,t('rt'));await sleep(30);const rnd=new Uint8Array(128);crypto.getRandomValues(rnd);const trailer=new Uint8Array(8+rnd.length);const tLen=8+rnd.length;
+  trailer[0]=(tLen>>24)&0xFF;trailer[1]=(tLen>>16)&0xFF;trailer[2]=(tLen>>8)&0xFF;trailer[3]=tLen&0xFF;trailer[4]=0x66;trailer[5]=0x72;trailer[6]=0x65;trailer[7]=0x65;trailer.set(rnd,8);
+  const final=new Uint8Array(bytes.length+trailer.length);final.set(bytes);final.set(trailer,bytes.length);
+  onP(95,t('fn'));const blob=new Blob([final],{type:file.type||'video/mp4'});
+  lg('✓ '+t('vp')+': '+fmt(file.size)+'→'+fmt(blob.size),'ok');onP(100,t('cp'));return blob;
+}
 
+function procVFull(file,onP){
   return new Promise((resolve,reject)=>{
-    const video=document.createElement('video');
-    video.muted=true;video.playsInline=true;
-    video.src=URL.createObjectURL(file);
-
+    const video=document.createElement('video');video.muted=false;video.playsInline=true;video.preload='auto';video.src=URL.createObjectURL(file);
     video.onloadedmetadata=()=>{
-      const doSpeed=document.getElementById('o-speed').checked;
-      const speed=doSpeed?1+(Math.random()*0.01-0.005):1;
-      video.playbackRate=speed;
-
-      const br=+document.getElementById('s-brightness').value;
-      const ct=+document.getElementById('s-contrast').value;
-      const ns=+document.getElementById('s-noise').value;
-      const doFlip=document.getElementById('o-flip').checked;
-      const doHue=document.getElementById('o-hue').checked;
-
-      const W=video.videoWidth;const H=video.videoHeight;
-      const canvas=document.createElement('canvas');canvas.width=W;canvas.height=H;
-      const ctx=canvas.getContext('2d');
-
-      // Build filter
-      let fl=[];
-      if(br>0)fl.push(`brightness(${1+(Math.random()*br*2-br)/100})`);
-      if(ct>0)fl.push(`contrast(${1+(Math.random()*ct*2-ct)/100})`);
-      if(doHue)fl.push(`hue-rotate(${~~(Math.random()*6)-3}deg)`);
-
-      const stream=canvas.captureStream(30);
-
-      // Try to capture audio
-      let combinedStream=stream;
-      try{
-        const audioCtx=new AudioContext();
-        const source=audioCtx.createMediaElementSource(video);
-        const dest=audioCtx.createMediaStreamDestination();
-        source.connect(dest);source.connect(audioCtx.destination);
-        const audioTrack=dest.stream.getAudioTracks()[0];
-        if(audioTrack){
-          combinedStream=new MediaStream([...stream.getVideoTracks(),audioTrack]);
-        }
-      }catch(e){/* no audio track, that's ok */}
-
+      const W=video.videoWidth,H=video.videoHeight,dur=video.duration;
+      const canvas=document.createElement('canvas');canvas.width=W;canvas.height=H;const ctx=canvas.getContext('2d');
+      const br=+document.getElementById('s-br').value,ct=+document.getElementById('s-ct').value,ns=+document.getElementById('s-ns').value;
+      const doFlip=$('o-flip'),doHue=$('o-hue');let fl=[];
+      if(br>0)fl.push(`brightness(${1+(Math.random()*br*2-br)/100})`);if(ct>0)fl.push(`contrast(${1+(Math.random()*ct*2-ct)/100})`);if(doHue)fl.push(`hue-rotate(${~~(Math.random()*6)-3}deg)`);
+      const cs=canvas.captureStream(30);let combined;
+      try{const ac=new AudioContext();const src=ac.createMediaElementSource(video);const dest=ac.createMediaStreamDestination();src.connect(dest);src.connect(ac.destination);const at=dest.stream.getAudioTracks();combined=at.length>0?new MediaStream([...cs.getVideoTracks(),...at]):cs;if(at.length)lg('🎵 Audio captured','ok')}catch(e){combined=cs}
       const mime=['video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'].find(m=>MediaRecorder.isTypeSupported(m))||'video/webm';
-      const rec=new MediaRecorder(combinedStream,{mimeType:mime,videoBitsPerSecond:Math.min(file.size*8/(video.duration||10)*0.9,8000000)});
-      const chunks=[];
-      rec.ondataavailable=e=>{if(e.data.size>0)chunks.push(e.data)};
-      rec.onstop=()=>{
-        const blob=new Blob(chunks,{type:mime});
-        resolve(blob);
-      };
-
-      function draw(){
-        if(video.paused||video.ended){rec.stop();return}
-        if(doFlip){ctx.save();ctx.translate(W,0);ctx.scale(-1,1)}
-        if(fl.length)ctx.filter=fl.join(' ');
-        ctx.drawImage(video,0,0,W,H);
-        ctx.filter='none';
-        if(doFlip)ctx.restore();
-
-        // noise on random frames
-        if(ns>0&&Math.random()<0.3){
-          const id=ctx.getImageData(0,0,W,H),d=id.data;
-          for(let i=0;i<d.length;i+=16){const n=(Math.random()-.5)*ns;d[i]=Math.min(255,Math.max(0,d[i]+n));d[i+1]=Math.min(255,Math.max(0,d[i+1]+n));d[i+2]=Math.min(255,Math.max(0,d[i+2]+n))}
-          ctx.putImageData(id,0,0);
-        }
-        requestAnimationFrame(draw);
-      }
-
-      rec.start();
-      video.play().then(()=>draw()).catch(reject);
-      video.onended=()=>{setTimeout(()=>{if(rec.state==='recording')rec.stop()},200)};
-
-      // Safety timeout
-      setTimeout(()=>{if(rec.state==='recording'){video.pause();rec.stop();lg('Timeout de segurança no vídeo','wr')}},video.duration*1000/speed+5000);
-    };
-    video.onerror=reject;
+      const rec=new MediaRecorder(combined,{mimeType:mime,videoBitsPerSecond:Math.min(~~(file.size*8/(dur||10)*.9),8e6)});
+      const chunks=[];rec.ondataavailable=e=>{if(e.data.size>0)chunks.push(e.data)};
+      rec.onstop=()=>{const blob=new Blob(chunks,{type:mime});lg('✓ '+t('vp')+': '+fmt(blob.size),'ok');resolve(blob)};
+      video.playbackRate=3;video.volume=0;let fc=0;
+      function draw(){if(video.paused||video.ended)return;if(doFlip){ctx.save();ctx.translate(W,0);ctx.scale(-1,1)}if(fl.length)ctx.filter=fl.join(' ');ctx.drawImage(video,0,0,W,H);ctx.filter='none';if(doFlip)ctx.restore();
+      if(ns>0&&Math.random()<.3){const id=ctx.getImageData(0,0,W,H),d=id.data;const step=Math.max(4,~~(d.length/50000)*4);for(let i=0;i<d.length;i+=step){const n=(Math.random()-.5)*ns;d[i]=Math.min(255,Math.max(0,d[i]+n));d[i+1]=Math.min(255,Math.max(0,d[i+1]+n));d[i+2]=Math.min(255,Math.max(0,d[i+2]+n))}ctx.putImageData(id,0,0)}
+      fc++;onP(Math.min(95,5+Math.round(video.currentTime/dur*90)),t('re')+' '+Math.round(video.currentTime/dur*100)+'%');requestAnimationFrame(draw)}
+      rec.start(100);video.play().then(()=>{onP(5,t('sv'));draw()}).catch(reject);
+      video.onended=()=>{setTimeout(()=>{if(rec.state==='recording')rec.stop();onP(100,t('cp'))},500)};
+      setTimeout(()=>{if(rec.state==='recording'){video.pause();rec.stop()}},Math.max((dur/3)*1000+10000,30000));
+    };video.onerror=()=>reject(new Error('Video load error'));
   });
 }
 
 btnProc.onclick=async()=>{
-  if(busy||!files.length)return;
-  busy=true;btnProc.disabled=true;btnProc.textContent='Processando...';
-  pbar.classList.add('on');processed.length=0;btnDL.classList.add('hide');
-  let ni=0,nv=0,nh=0;
-  lg('Iniciando batch: '+files.length+' criativos','nf');
-
+  if(busy||!files.length)return;busy=true;btnProc.disabled=true;processed.length=0;btnDL.classList.add('hide');
+  ppanel.classList.add('on');ppSpin.style.display='';ppTtlTxt.textContent=t('pp_processing');
+  const t0=Date.now();clearInterval(timerIv);timerIv=setInterval(()=>{ppTime.textContent=fmtT((Date.now()-t0)/1000)},500);
+  let ni=0,nv=0,nh=0;lg(t('batch')+': '+files.length+' '+t('crtv')+' | '+t('vm')+': '+vidMode,'nf');
+  if(files.some(f=>f.type==='vid')&&vidMode==='full')ppWarn.classList.add('on');else ppWarn.classList.remove('on');
   for(let i=0;i<files.length;i++){
-    files[i].status='proc';renderFL();
-    pfill.style.width=(i/files.length*100)+'%';
-    try{
-      let blob;
-      if(files[i].type==='img'){
-        const img=await loadImg(files[i].file);
-        lg('Carregado: '+files[i].file.name+' ('+img.width+'x'+img.height+')','nf');
-        blob=await procImg(img);ni++;
-        lg('✓ Imagem limpa: '+files[i].file.name,'ok');
-      }else{
-        blob=await procVid(files[i].file);nv++;
-        lg('✓ Vídeo re-encoded: '+files[i].file.name,'ok');
-      }
-      nh++;
-      const ext=files[i].type==='img'?'.jpg':'.webm';
+    files[i].status='proc';renderFL();const base=i/files.length*100,next=(i+1)/files.length*100;ppCnt.textContent=i+'/'+files.length;
+    try{let blob;
+      if(files[i].type==='img'){sP(base,t('li'),files[i].file.name);const img=await loadImg(files[i].file);sP(base+(next-base)*.3,t('pi'),files[i].file.name);blob=await procImg(img);ni++;nh++;lg('✓ '+t('ic')+': '+files[i].file.name+' → '+fmt(blob.size),'ok')}
+      else{const cb=(pct,step)=>{sP(base+((next-base)*(pct/100)),step,files[i].file.name);const e=(Date.now()-t0)/1000;if(i>0)ppEta.textContent=fmtT(Math.max(0,(e/(i+pct/100))*(files.length-i-pct/100)))};
+      blob=vidMode==='fast'?await procVF(files[i].file,cb):await procVFull(files[i].file,cb);nv++;nh++}
+      const ext=files[i].type==='img'?'.jpg':(vidMode==='full'?'.webm':'.'+files[i].file.name.split('.').pop());
       processed.push({blob,name:'zb_'+files[i].file.name.replace(/\.[^.]+$/,ext)});
-      files[i].status='done';renderFL();
-    }catch(e){
-      lg('✗ Erro: '+files[i].file.name+' — '+e.message,'wr');
-      files[i].status='pending';renderFL();
-    }
-  }
-
-  pfill.style.width='100%';
-  stats1.style.display='grid';
-  document.getElementById('s-total').textContent=files.length;
-  document.getElementById('s-imgs').textContent=ni;
-  document.getElementById('s-vids').textContent=nv;
-  document.getElementById('s-hash').textContent=nh;
-  lg('Batch completo! '+nh+'/'+files.length+' criativos limpos.','ok');
-  btnProc.textContent='Processar Todos os Criativos';btnProc.disabled=false;busy=false;
-  if(processed.length)btnDL.classList.remove('hide');
+      files[i].status='done';renderFL();ppCnt.textContent=(i+1)+'/'+files.length;sP(next,t('cp'),files[i].file.name);
+      const el=(Date.now()-t0)/1000;const rem=(el/(i+1))*(files.length-i-1);ppEta.textContent=rem>0?fmtT(rem):'0s';
+    }catch(e){lg('✗ '+files[i].file.name+': '+e.message,'wr');files[i].status='err';renderFL()}}
+  clearInterval(timerIv);const tot=(Date.now()-t0)/1000;ppTime.textContent=fmtT(tot);ppEta.textContent='0s';ppFill.style.width='100%';ppPct.textContent='100%';
+  ppCnt.textContent=files.length+'/'+files.length;ppStep.textContent='✓ '+t('ppd');ppStep.className='pp-cur__st ok';
+  ppName.textContent=nh+' '+t('crtv')+' '+t('inn')+' '+fmtT(tot);ppSpin.style.display='none';ppTtlTxt.textContent=t('ppc');ppWarn.classList.remove('on');
+  document.getElementById('stats1').style.display='grid';document.getElementById('s-total').textContent=files.length;document.getElementById('s-imgs').textContent=ni;document.getElementById('s-vids').textContent=nv;document.getElementById('s-hash').textContent=nh;
+  lg(t('done')+': '+nh+'/'+files.length+' '+t('inn')+' '+fmtT(tot),'ok');btnProc.disabled=false;busy=false;if(processed.length)btnDL.classList.remove('hide');
 };
+btnDL.onclick=()=>{processed.forEach(({blob,name})=>{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(a.href)});lg(t('dl')+' '+processed.length+' '+t('fls'),'ok')};
 
-btnDL.onclick=()=>{
-  processed.forEach(({blob,name})=>{
-    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;
-    document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(a.href);
-  });
-  lg('Download de '+processed.length+' arquivos','ok');
-};
-
-
-/* ═══════════════════════════════════════ */
-/* TAB 2: METADATA VIEWER                 */
-/* ═══════════════════════════════════════ */
-const metaOut=document.getElementById('metaContent');
+/* ═══ TAB 2 ═══ */
 initDrop('drop2','in2',fl=>{if(fl[0])showMeta(fl[0])});
-
 async function showMeta(file){
-  const isVid=file.type.startsWith('video/');
-  const info={};
-
-  // Basic file info
-  info['Nome']=file.name;
-  info['Tipo']=file.type;
-  info['Tamanho']=fmt(file.size);
-  info['Última modificação']=new Date(file.lastModified).toLocaleString('pt-BR');
-
-  // Hash
-  const buf=await file.slice(0,Math.min(file.size,1048576)).arrayBuffer();
-  const hashBuf=await crypto.subtle.digest('SHA-256',buf);
-  const hashArr=Array.from(new Uint8Array(hashBuf));
-  info['SHA-256 (1MB)']=hashArr.map(b=>b.toString(16).padStart(2,'0')).join('').substring(0,32)+'...';
-
-  if(isVid){
-    await getVideoMeta(file,info);
-  }else{
-    await getImageMeta(file,info);
-  }
-
-  renderMeta(info,file,isVid);
+  const isV=file.type.startsWith('video/');const info={};
+  info[t('nm')]=file.name;info[t('tp')]=file.type||'?';info[t('sz')]=fmt(file.size);info[t('mod')]=new Date(file.lastModified).toLocaleString(lang==='pt'?'pt-BR':'en-US');
+  const buf=await file.slice(0,Math.min(file.size,1048576)).arrayBuffer();const h=await crypto.subtle.digest('SHA-256',buf);
+  info['SHA-256']=Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join('').substring(0,40)+'…';
+  if(isV){await new Promise(r=>{const v=document.createElement('video');v.preload='metadata';v.onloadedmetadata=()=>{info[t('reso')]=v.videoWidth+'x'+v.videoHeight;info[t('dur')]=v.duration.toFixed(2)+'s';info['Aspect']=(v.videoWidth/v.videoHeight).toFixed(3);URL.revokeObjectURL(v.src);r()};v.onerror=()=>r();v.src=URL.createObjectURL(file)});
+  const bytes=new Uint8Array(buf);const bx=['meta','udta','XMP_','uuid','free','skip','mvhd','tkhd','mdhd','hdlr','moov','mdat'];for(let i=0;i<bytes.length-8;i++){const nm=String.fromCharCode(bytes[i+4],bytes[i+5],bytes[i+6],bytes[i+7]);if(bx.includes(nm)){const s=(bytes[i]<<24)|(bytes[i+1]<<16)|(bytes[i+2]<<8)|bytes[i+3];if(s>0&&s<bytes.length)info['Box: '+nm]=fmt(s)+' @ '+i}}
+  const txt=Array.from(bytes.slice(0,50000)).map(b=>(b>=32&&b<127)?String.fromCharCode(b):'').join('');const sw=txt.match(/(Lavf|ffmpeg|HandBrake|Adobe|Premiere|DaVinci|CapCut|InShot|Canva|iMovie|Final.Cut|QuickTime|x264|x265)/i);if(sw)info['Software']=sw[1];
+  }else{await new Promise(r=>{const img=new Image();img.onload=()=>{info[t('reso')]=img.width+'x'+img.height;info['Aspect']=(img.width/img.height).toFixed(3);URL.revokeObjectURL(img.src);r()};img.onerror=()=>r();img.src=URL.createObjectURL(file)});if(file.type==='image/jpeg'){const e=await readExif(file);if(e)Object.assign(info,e)}}
+  const fp=info['EXIF Block']||info['Software']||info['Box: udta']||info['Box: meta'];
+  let html=`<div class="card"><div class="card__title">${t('md')}</div>`;
+  if(isV)html+=`<video style="width:100%;max-height:280px;border-radius:8px;margin-bottom:16px;background:#000" src="${URL.createObjectURL(file)}" controls></video>`;
+  else html+=`<img style="max-width:300px;max-height:280px;border-radius:8px;margin-bottom:16px;display:block" src="${URL.createObjectURL(file)}">`;
+  html+=fp?`<div style="padding:10px 14px;background:var(--red-dim);border:1px solid rgba(239,68,68,.25);border-radius:8px;margin-bottom:16px;font-size:12px;color:var(--red)">${t('fpd')}</div>`:`<div style="padding:10px 14px;background:var(--green-dim);border:1px solid rgba(34,197,94,.25);border-radius:8px;margin-bottom:16px;font-size:12px;color:var(--green)">${t('fpc')}</div>`;
+  Object.entries(info).forEach(([k,v])=>{html+=`<div class="meta-row"><span class="k">${k}</span><span class="v">${v}</span></div>`});
+  html+=`</div>`;document.getElementById('metaOut').innerHTML=html;
 }
+async function readExif(file){try{const buf=await file.arrayBuffer();const view=new DataView(buf);if(view.getUint16(0)!==0xFFD8)return null;const exif={};let off=2;while(off<view.byteLength-1){const m=view.getUint16(off);if(m===0xFFE1){exif['EXIF Block']='offset '+off;const len=view.getUint16(off+2);exif['EXIF Size']=len+' bytes';const sl=new Uint8Array(buf,off+4,Math.min(len,2000));const txt=Array.from(sl).map(b=>(b>=32&&b<127)?String.fromCharCode(b):'').join('');const sw=txt.match(/(Adobe[^\0]{0,30}|Photoshop[^\0]{0,20}|GIMP[^\0]{0,10}|Canva[^\0]{0,10}|iPhone[^\0]{0,15}|Samsung[^\0]{0,15}|Canon[^\0]{0,15}|Nikon[^\0]{0,15}|CapCut[^\0]{0,15}|Lightroom[^\0]{0,15})/i);if(sw)exif['Software']=sw[1].trim();break}if((m&0xFF00)!==0xFF00)break;off+=2+view.getUint16(off+2)}return Object.keys(exif).length?exif:{'EXIF':'Not found'}}catch(e){return null}}
 
-function getVideoMeta(file,info){
-  return new Promise(r=>{
-    const v=document.createElement('video');v.preload='metadata';
-    v.onloadedmetadata=()=>{
-      info['Largura']=v.videoWidth+'px';
-      info['Altura']=v.videoHeight+'px';
-      info['Duração']=v.duration.toFixed(2)+'s';
-      info['Resolução']=v.videoWidth+'x'+v.videoHeight;
-      URL.revokeObjectURL(v.src);r();
-    };
-    v.onerror=()=>r();
-    v.src=URL.createObjectURL(file);
-  });
-}
-
-function getImageMeta(file,info){
-  return new Promise(r=>{
-    const img=new Image();
-    img.onload=()=>{
-      info['Largura']=img.width+'px';
-      info['Altura']=img.height+'px';
-      info['Aspect Ratio']=(img.width/img.height).toFixed(3);
-
-      // Try to read EXIF from JPEG
-      if(file.type==='image/jpeg'){
-        readExif(file).then(exif=>{
-          if(exif){Object.assign(info,exif)}
-          URL.revokeObjectURL(img.src);r();
-        });
-      }else{URL.revokeObjectURL(img.src);r()}
-    };
-    img.onerror=()=>r();
-    img.src=URL.createObjectURL(file);
-  });
-}
-
-async function readExif(file){
-  try{
-    const buf=await file.arrayBuffer();
-    const view=new DataView(buf);
-    if(view.getUint16(0)!==0xFFD8)return null; // Not JPEG
-
-    const exif={};let offset=2;
-    while(offset<view.byteLength-1){
-      const marker=view.getUint16(offset);
-      if(marker===0xFFE1){// APP1 = EXIF
-        exif['EXIF Block']='Encontrado @ offset '+offset;
-        const len=view.getUint16(offset+2);
-        exif['EXIF Tamanho']=len+' bytes';
-
-        // Try to find ASCII strings in EXIF data
-        const slice=new Uint8Array(buf,offset+4,Math.min(len,2000));
-        const txt=Array.from(slice).map(b=>(b>=32&&b<127)?String.fromCharCode(b):'').join('');
-        const soft=txt.match(/(Adobe[^\0]{0,30}|Photoshop[^\0]{0,20}|GIMP[^\0]{0,10}|Canva[^\0]{0,10}|iPhone[^\0]{0,15}|Samsung[^\0]{0,15}|Canon[^\0]{0,15}|Nikon[^\0]{0,15}|CapCut[^\0]{0,15})/i);
-        if(soft)exif['Software/Device']=soft[1].trim();
-
-        break;
-      }
-      if((marker&0xFF00)!==0xFF00)break;
-      const len=view.getUint16(offset+2);
-      offset+=2+len;
-    }
-    return Object.keys(exif).length?exif:{'EXIF':'Não encontrado'};
-  }catch(e){return null}
-}
-
-function renderMeta(info,file,isVid){
-  const hasExif=info['EXIF Block']||info['Software/Device'];
-  let html=`<div class="card"><div class="card__title">Metadata detectada</div>`;
-
-  // Preview
-  if(isVid){
-    html+=`<video class="cmp-vid" src="${URL.createObjectURL(file)}" controls style="margin-bottom:16px"></video>`;
-  }else{
-    html+=`<img class="cmp-preview" src="${URL.createObjectURL(file)}" style="margin-bottom:16px;display:block;max-width:300px">`;
-  }
-
-  // Danger indicator
-  if(hasExif){
-    html+=`<div style="padding:10px 14px;background:var(--red-dim);border:1px solid rgba(239,68,68,.25);border-radius:8px;margin-bottom:16px;font-size:12px;color:var(--red)">⚠ Metadata EXIF detectada — este criativo tem fingerprint identificável</div>`;
-  }else{
-    html+=`<div style="padding:10px 14px;background:var(--green-dim);border:1px solid rgba(34,197,94,.25);border-radius:8px;margin-bottom:16px;font-size:12px;color:var(--green)">✓ Nenhuma metadata EXIF detectada — arquivo parece limpo</div>`;
-  }
-
-  Object.entries(info).forEach(([k,v])=>{
-    html+=`<div class="meta-row"><span class="k">${k}</span><span class="v">${v}</span></div>`;
-  });
-
-  html+=`</div>`;
-  metaOut.innerHTML=html;
-}
-
-
-/* ═══════════════════════════════════════ */
-/* TAB 3: COMPARE                         */
-/* ═══════════════════════════════════════ */
+/* ═══ TAB 3 ═══ */
 let cmpA=null,cmpB=null;
-const cmpPA=document.getElementById('cmp-preview-a');
-const cmpPB=document.getElementById('cmp-preview-b');
-const cmpRes=document.getElementById('cmpResult');
-
-initDrop('drop-cmp-a','in-cmp-a',fl=>{if(fl[0]){cmpA=fl[0];showCmpPreview(fl[0],cmpPA);tryCompare()}});
-initDrop('drop-cmp-b','in-cmp-b',fl=>{if(fl[0]){cmpB=fl[0];showCmpPreview(fl[0],cmpPB);tryCompare()}});
-
-function showCmpPreview(file,container){
-  if(file.type.startsWith('video/')){
-    container.innerHTML=`<video class="cmp-vid" src="${URL.createObjectURL(file)}" controls></video>`;
-  }else{
-    container.innerHTML=`<img class="cmp-preview" src="${URL.createObjectURL(file)}">`;
-  }
+initDrop('drop-a','in-a',fl=>{if(fl[0]){cmpA=fl[0];cPr(fl[0],'prev-a');tryCmp()}});
+initDrop('drop-b','in-b',fl=>{if(fl[0]){cmpB=fl[0];cPr(fl[0],'prev-b');tryCmp()}});
+function cPr(f,id){const c=document.getElementById(id);c.innerHTML=f.type.startsWith('video/')?`<video style="width:100%;max-height:220px;border-radius:6px;margin-top:12px" src="${URL.createObjectURL(f)}" controls></video>`:`<img src="${URL.createObjectURL(f)}" style="max-width:100%;max-height:220px;border-radius:6px;margin-top:12px">`}
+async function tryCmp(){
+  if(!cmpA||!cmpB)return;const ia=await gM(cmpA),ib=await gM(cmpB);
+  let html=`<div style="margin-top:20px" class="card"><div class="card__title">${t('res')}</div>`;
+  html+=`<div class="cmp-diff__row" style="font-weight:600;border-bottom:2px solid var(--border)"><div class="cmp-diff__label">${t('fld')}</div><div class="cmp-diff__before">${t('cmp_original')}</div><div class="cmp-diff__after">${t('cmp_processed')}</div></div>`;
+  const keys=[...new Set([...Object.keys(ia),...Object.keys(ib)])];let ch=0;
+  keys.forEach(k=>{const a=ia[k]||'—',b=ib[k]||'—';const d=a!==b;if(d)ch++;html+=`<div class="cmp-diff__row"><div class="cmp-diff__label">${k}${d?' <span class="badge-changed">CHANGED</span>':''}</div><div class="cmp-diff__before">${a}</div><div class="cmp-diff__after">${b}</div></div>`});
+  const p=keys.length?~~(ch/keys.length*100):0;const c=p>30?'green':p>10?'yellow':'red';
+  const tx=p>30?t('fpok'):p>10?t('fpmod'):t('fpsim');
+  html+=`<div style="margin-top:14px;padding:12px 16px;background:var(--${c}-dim);border:1px solid var(--${c});border-radius:8px;font-size:13px;color:var(--${c});text-align:center">${tx}<br><span style="font-family:var(--mono);font-size:11px">${ch}/${keys.length} ${t('fch')} (${p}%)</span></div></div>`;
+  document.getElementById('cmpRes').innerHTML=html;
 }
-
-async function tryCompare(){
-  if(!cmpA||!cmpB)return;
-  const ia=await getMeta(cmpA);const ib=await getMeta(cmpB);
-
-  let html=`<div class="cmp-diff" style="margin-top:20px"><div class="card"><div class="card__title">Resultado da comparação</div>`;
-  html+=`<div class="cmp-diff__row" style="font-weight:600"><div class="cmp-diff__label">Campo</div><div class="cmp-diff__before">Original</div><div class="cmp-diff__after">Processado</div></div>`;
-
-  const allKeys=[...new Set([...Object.keys(ia),...Object.keys(ib)])];
-  let changes=0;
-  allKeys.forEach(k=>{
-    const va=ia[k]||'—';const vb=ib[k]||'—';
-    const changed=va!==vb;if(changed)changes++;
-    html+=`<div class="cmp-diff__row"><div class="cmp-diff__label">${k} ${changed?'<span class="badge-changed">CHANGED</span>':''}</div><div class="cmp-diff__before">${va}</div><div class="cmp-diff__after">${vb}</div></div>`;
-  });
-
-  // Verdict
-  const pct=allKeys.length?~~(changes/allKeys.length*100):0;
-  const verdict=pct>30?'green':pct>10?'yellow':'red';
-  const verdictText=pct>30?'Fingerprint suficientemente diferente ✓':pct>10?'Diferença moderada — considere mais alterações':'⚠ Muito similar — alto risco de match';
-  html+=`</div><div style="margin-top:14px;padding:12px 16px;background:var(--${verdict}-dim);border:1px solid var(--${verdict});border-radius:8px;font-size:13px;color:var(--${verdict});text-align:center">${verdictText} — ${changes}/${allKeys.length} campos alterados (${pct}%)</div></div>`;
-  cmpRes.innerHTML=html;
-}
-
-async function getMeta(file){
-  const m={};
-  m['Nome']=file.name;m['Tipo']=file.type;m['Tamanho']=fmt(file.size);
-
-  const buf=await file.slice(0,Math.min(file.size,1048576)).arrayBuffer();
-  const h=await crypto.subtle.digest('SHA-256',buf);
-  m['SHA-256']=Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join('').substring(0,24)+'...';
-
-  if(file.type.startsWith('video/')){
-    await new Promise(r=>{const v=document.createElement('video');v.preload='metadata';v.onloadedmetadata=()=>{m['Resolução']=v.videoWidth+'x'+v.videoHeight;m['Duração']=v.duration.toFixed(2)+'s';r()};v.onerror=()=>r();v.src=URL.createObjectURL(file)});
-  }else{
-    await new Promise(r=>{const img=new Image();img.onload=()=>{m['Resolução']=img.width+'x'+img.height;m['Aspect']=( img.width/img.height).toFixed(3);r()};img.onerror=()=>r();img.src=URL.createObjectURL(file)});
-    if(file.type==='image/jpeg'){const exif=await readExif(file);if(exif)Object.assign(m,exif)}
-  }
-  return m;
-}
-
+async function gM(f){const m={};m[t('nm')]=f.name;m[t('tp')]=f.type;m[t('sz')]=fmt(f.size);const buf=await f.slice(0,Math.min(f.size,1048576)).arrayBuffer();const h=await crypto.subtle.digest('SHA-256',buf);m['SHA-256']=Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join('').substring(0,24)+'…';
+if(f.type.startsWith('video/')){await new Promise(r=>{const v=document.createElement('video');v.preload='metadata';v.onloadedmetadata=()=>{m[t('reso')]=v.videoWidth+'x'+v.videoHeight;m[t('dur')]=v.duration.toFixed(2)+'s';r()};v.onerror=()=>r();v.src=URL.createObjectURL(f)})}
+else{await new Promise(r=>{const i=new Image();i.onload=()=>{m[t('reso')]=i.width+'x'+i.height;m['Aspect']=(i.width/i.height).toFixed(3);r()};i.onerror=()=>r();i.src=URL.createObjectURL(f)});if(f.type==='image/jpeg'){const e=await readExif(f);if(e)Object.assign(m,e)}}return m}
 </script>
 </body>
 </html>
